@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# This script is a bash script debugging utility which shows the words that result from shell expansions.
+
+echo -n "$#:"
+
+for word in "$@"; do
+	echo -n " \"$word\""
+done
+
+echo

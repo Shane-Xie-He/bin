@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+if [[ $COLOR != 1 && $COLOR != 0 ]]; then
+	if [[ -t 1 ]]; then
+		COLOR=1
+	else
+		COLOR=0
+	fi
+fi
+
+if [[ $COLOR == 1 ]]; then
+	color_word='always'
+	bold_red='\x1B[1;31m'
+	bold_blue='\x1B[1;34m'
+	purple='\x1B[35m'
+	default='\x1B[0m'
+else
+	color_word='never'
+fi
+
+for file in "$@"; do
+	echo -e "${bold_blue}${file}${default}:"
+
+	# Find unprintable characters
+	if grep -nT --color=$color_word '[^[:print:]]' "$file"; then
+		echo -ne "${bold_red}Unprintable characters found.${default} ${bold_red}Continue?${default} "
+		read line
+		line=`echo -n "$line" | sed 's/.*/\L&/'`
+		if [[ $line != '' && $line != 'y' && $line != 'yes' ]]; then
+			continue
+		fi
+	fi
+
+	# Find lines that exceed 80 characters, and mark the 80th columns in them
+	sed '
+/.\{81,\}/ {=; p}
+d
+' "$file" | sed "
+h
+N
+s/\n/\t/
+x
+s/././g
+s/.*/${purple}&${default}/
+s/$/\t/
+s/$/                                                               the 80th column ^/
+s/the 80th column ^/${purple}the 80th column${default} ${bold_red}^${default}/
+x
+G
+"
+
+done

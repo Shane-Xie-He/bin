@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+if [[ $COLOR != 1 && $COLOR != 0 ]]; then
+	if [[ -t 1 ]]; then
+		COLOR=1
+	else
+		COLOR=0
+	fi
+fi
+
+if [[ $COLOR == 1 ]]; then
+	color_word='always'
+	bold_blue='\x1B[1;34m'
+	default='\x1B[0m'
+else
+	color_word='never'
+fi
+
+ls -FR --color=$color_word "$@" | sed '$ s/^\x1B\[m$//' | sed '$ s/$/\n/' | sed -E "
+s,(^|/)([^/]*):,\1${bold_blue}\2${default}:,
+s,[^/]*/,--,g
+:nextfile
+N
+s,\n$,,
+t end
+b nextfile
+:end
+s,\n,  ,g
+"
