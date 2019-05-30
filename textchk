@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+for file in "$@"; do
+	if grep -q $'\r' "$file"; then
+		echo "$file contains \r characters."
+	fi
+	if ! cmp -s <(tail -c 1 "$file") <(echo) && ! cmp -s "$file" /dev/null; then
+		echo "$file ends with a character other than \n."
+	fi
+	if grep -q '\s$' "$file"; then
+		echo "$file contains trailing whitespaces."
+	fi
+done
