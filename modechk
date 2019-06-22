@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+for file in "$@"; do
+	mode=$(ls -ld "$file" | cut -b 2-10)
+	if [[ $mode != "rw-r--r--" && $mode != "rwxr-xr-x" ]]; then
+		echo "$mode  $file"
+	fi
+done
