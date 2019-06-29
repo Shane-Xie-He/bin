@@ -16,7 +16,7 @@ else
 	color_word='never'
 fi
 
-ls -FR --color=$color_word "$@" | sed '$ s/^\x1B\[m$//' | sed '$ s/$/\n/' | sed -E "
+ls -FR --color=$color_word "$@" | sed '$ s/$/\n/' | sed -E "
 s,(^|/)([^/]*):,\1${bold_blue}\2${default}:,
 s,[^/]*/,--,g
 :nextfile
