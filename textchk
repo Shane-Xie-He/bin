@@ -4,7 +4,7 @@ for file in "$@"; do
 	if ! cmp -s <(tail -c 1 "$file") <(echo) && ! cmp -s <(tail -c 1 "$file") /dev/null; then
 		echo "$file ends with a character other than \n."
 	fi
-	if grep -qvE $'^((\t*| *)[[:graph:]]([[:print:]]*[[:graph:]])?)?$' "$file"; then
+	if grep -vEHn --color=always $'^((\t*| *)[[:graph:]]([[:print:]]*[[:graph:]])?)?$' "$file"; then
 		echo "$file has incorrect lines."
 	fi
 done
