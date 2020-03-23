@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+echo "16 Colors, Foreground"
+for code in 39 {30..37} {90..97}; do
+	printf "\e[%sm %3s \e[0m" $code $code
+done
+echo
+echo "16 Colors, Background"
+for code in 49 {40..47} {100..107}; do
+	printf "\e[%sm %3s \e[0m" $code $code
+done
+echo
+echo "Formatting"
+for code in 0 1 2 4 5 7 8; do
+	printf "\e[%sm  %s  \e[0m" $code $code
+done
+echo
+echo "256 Colors"
+for fgbg in 38 48; do # foreground/background
+	# 16 colors
+	for color in {0..15}; do
+		printf "\e[%s;5;%sm  %2s \e[0m" $fgbg $color $color
+	done
+	echo
+	# 6*6*6 colors
+	for color in {16..231}; do
+		printf "\e[%s;5;%sm  %3s  \e[0m" $fgbg $color $color
+		if [[ $((color % 6)) -eq 3 ]]; then
+			echo
+		fi
+	done
+	# 24 grey-scale colors
+	for color in {232..255}; do
+		printf "\e[%s;5;%sm  %3s  \e[0m" $fgbg $color $color
+		if [[ $((color % 12)) -eq 3 ]]; then
+			echo
+		fi
+	done
+done
