@@ -23,7 +23,7 @@ for file in "$@"; do
 
 	# Find unprintable characters
 	if grep -nT --color=$color_word '[^[:print:]]' "$file"; then
-		echo -ne "${bold_red}Unprintable characters found.${default} ${bold_red}Continue?${default} "
+		echo -ne "${bold_red}Unprintable characters found. Continue?${default} "
 		read line
 		line=`echo -n "$line" | sed 's/.*/\L&/'`
 		if [[ $line != '' && $line != 'y' && $line != 'yes' ]]; then
@@ -44,7 +44,7 @@ s/././g
 s/.*/${purple}&${default}/
 s/$/\t/
 s/$/                                                               the 80th column ^/
-s/the 80th column ^/${purple}the 80th column${default} ${bold_red}^${default}/
+s/the 80th column \^$/${purple}the 80th column${default} ${bold_red}^${default}/
 x
 G
 "
