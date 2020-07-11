@@ -1,0 +1,6 @@
+#!/usr/bin/sed -Ef
+
+:next
+N        # Read the next line. If there are no more lines, exit
+s/\n/, / # Replace the '\n' between the current line and previous lines
+b next

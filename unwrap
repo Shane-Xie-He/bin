@@ -1,0 +1,10 @@
+#!/usr/bin/sed -Ef
+
+/^$/ b   # If it's an empty line, start the next cycle
+
+:next
+N        # Read the next line. If there are no more lines, exit
+s,\n$,,  # Test if an empty line has encountered
+t        # If yes, start the next cycle
+s,\n,,   # Replace the '\n' between the current line and previous lines
+b next
